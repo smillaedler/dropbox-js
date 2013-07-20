@@ -117,8 +117,9 @@ task 'cordova', ->
 task 'cordovatest', ->
   vendor ->
     build ->
-      buildCordovaApp ->
-        testCordovaApp()
+      scaffoldCordovaApp ->
+        buildCordovaApp ->
+          testCordovaApp()
 
 build = (callback) ->
   buildCode ->
@@ -349,8 +350,32 @@ chromeCommand = ->
     'google-chrome'
 
 testCordovaApp = (callback) ->
-  run 'test/cordova_app/cordova/run', ->
+  run 'cd test/cordova_app && ../../node_modules/cordova/bin/cordova ' +
+      ' run', ->
     callback() if callback
+
+scaffoldCordovaApp = (callback) ->
+  step1 = ->
+    if fs.existsSync 'test/cordova_app'
+      step2()
+    else
+      run 'node_modules/cordova/bin/cordova create test/cordova_app ' +
+          'com.dropbox.js.tests "Dropbox.js Tests"', ->
+        step2()
+  step2 = ->
+    platform = process.env['CORDOVA_PLATFORM'] or 'android'
+    commands = []
+    commands.push(
+        'cd test/cordova_app && ../../node_modules/cordova/bin/cordova ' +
+        "platform add #{platform}")
+    commands.push(
+        'cd test/cordova_app && ../../node_modules/cordova/bin/cordova ' +
+        'plugin add ' +
+        'https://git-wip-us.apache.org/repos/asf/cordova-plugin-inappbrowser.git')
+    async.forEachSeries commands, run, ->
+      callback() if callback
+      
+  step1()
 
 buildCordovaApp = (callback) ->
   if fs.existsSync 'test/cordova_app/www'  # iOS
