@@ -1278,6 +1278,7 @@ class Dropbox.Client
       fileopsCreateFolder: "#{@apiServer}/1/fileops/create_folder"
       fileopsDelete: "#{@apiServer}/1/fileops/delete"
       fileopsMove: "#{@apiServer}/1/fileops/move"
+    @
 
   # Chooses an API server that will be used by this client.
   #

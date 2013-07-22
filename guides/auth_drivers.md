@@ -1,8 +1,8 @@
 # Authentication Drivers
 
-This document explains the structure and functionality of a `dropbox.js` OAuth
-driver, and is intended to help the development of custom OAuth drivers.
-[builtin_drivers.md](The built-in OAuth drivers) are a good starting point for
+This document explains the structure and functionality of a `dropbox.js` auth
+driver, and is intended to help the development of custom auth drivers.
+[builtin_drivers.md](The built-in auth drivers) are a good starting point for
 new implementations.
 
 
@@ -30,7 +30,11 @@ environment that runs the code using `dropbox.js`
 
 ### Browser-Side Applications
 
+OAuth drivers for applications that run in untrusted environments use the
+OAuth 2 Implicit Grant flow. Drivers choose this flow by returning `token` from
+the `authType()` method.
 
+Drivers for browser-side applications
 
 ### Server-Side Applications
 
